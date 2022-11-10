@@ -1,4 +1,5 @@
 import React from 'react'
+import MusicSearchResult from './MusicSearchResult'
 import {useState, useEffect} from 'react'
 import useAuthHook from './useAuthHook'
 import { Container, Form }  from 'react-bootstrap'
@@ -14,13 +15,42 @@ const spotifyApi = new SpotifyWebApi({
 export default function CodeDB({code}) {
   const accessToken = useAuthHook(code)
   const [search, setSearch] = useState('')
+  const [results, setResults] = useState([])
+  console.log(results)
+
+
+  useEffect(()=> {
+    if (!accessToken) return
+    spotifyApi.setAccessToken(accessToken)
+}, [accessToken])
 
 
 useEffect(() => {
+    if (!search) return setResults([])
     if (!accessToken) return
-    spotifyApi.setAccessToken(accessToken)
 
-}, [accessToken,])
+    let cancel = false
+
+
+    spotifyApi.searchTracks(search).then(res => {
+        if (cancel) return
+       setResults(res.body.tracks.items.map(tracks =>{
+          const albumImage = tracks.album.images.reduce((smallest, image) =>{
+            if (image.height < smallest.height) return image
+            return smallest
+          }, tracks.album.images[0])
+
+
+          return {
+            artist: tracks.artists[0].name,
+            trackName: tracks.name,
+            albumUrl: albumImage.url
+        }
+       }))
+    })
+
+    return () => cancel = true
+},[search, accessToken])
 
 
   return (
@@ -28,8 +58,10 @@ useEffect(() => {
         <Form.Control type='search' placeholder='Search Music/Artists...' value={search}
             onChange={e => setSearch(e.target.value)}
         />
-        <<div className='flex-grow-1 my-2' style={{ overflowY: 'auto' }}>
-            Music
+        <div className='flex-grow-1 my-2' style={{ overflowY: "auto" }}>
+            {results.map(tracks => (
+                 <MusicSearchResult tracks={tracks} key={tracks.uri} />
+            ))}
             
         </div>
      </Container>
