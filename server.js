@@ -19,7 +19,7 @@ app.post('/refresh', (req, res) => {
     spotifyApi
      .refreshAccessToken()
      .then(data => { 
-        
+
      })
      .catch(() => { 
         res.sendStatus(400)

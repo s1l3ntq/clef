@@ -20,8 +20,8 @@ export default function CodeDB({code}) {
   const [playTrack, setPlayTrack] = useState()
   
 
-  function selectTrack(track) {
-    setPlayTrack(track)
+  function selectTrack(tracks) {
+    setPlayTrack(tracks)
     setSearch('')
   }
 
