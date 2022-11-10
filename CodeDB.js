@@ -2,6 +2,7 @@ import React from 'react'
 import MusicSearchResult from './MusicSearchResult'
 import {useState, useEffect} from 'react'
 import useAuthHook from './useAuthHook'
+import Player from './Player'
 import { Container, Form }  from 'react-bootstrap'
 import SpotifyWebApi from 'spotify-web-api-node'
 
@@ -16,7 +17,13 @@ export default function CodeDB({code}) {
   const accessToken = useAuthHook(code)
   const [search, setSearch] = useState('')
   const [results, setResults] = useState([])
-  console.log(results)
+  const [PlayTrack, setPlayTrack] = useState()
+  
+
+  function selectTrack(track) {
+    setPlayTrack(track)
+    setSearch('')
+  }
 
 
   useEffect(()=> {
@@ -64,6 +71,7 @@ useEffect(() => {
             ))}
             
         </div>
+        <div><Player accessToken={accessToken} trackUri={playTrack?.uri} /></div>
      </Container>
   )
 }

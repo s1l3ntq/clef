@@ -1,6 +1,11 @@
 import React from 'react'
 
-export default function MusicSearchResult({tracks}) {
+export default function MusicSearchResult({tracks, chooseTrack}) {
+  function handlePlay(){
+    chooseTrack(tracks)
+  }
+
+
   return (
     <div className='d-flex m-2 align-items-center' 
          style={{cursor: 'pointer'}}
