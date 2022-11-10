@@ -17,13 +17,17 @@ export default function CodeDB({code}) {
   const accessToken = useAuthHook(code)
   const [search, setSearch] = useState('')
   const [results, setResults] = useState([])
-  const [PlayTrack, setPlayTrack] = useState()
+  const [playTrack, setPlayTrack] = useState()
   
 
   function selectTrack(track) {
     setPlayTrack(track)
     setSearch('')
   }
+
+  useEffect(() => {
+    if (!playTrack) return
+  }, [playTrack])
 
 
   useEffect(()=> {
@@ -67,7 +71,7 @@ useEffect(() => {
         />
         <div className='flex-grow-1 my-2' style={{ overflowY: "auto" }}>
             {results.map(tracks => (
-                 <MusicSearchResult tracks={tracks} key={tracks.uri} />
+                 <MusicSearchResult tracks={tracks} key={tracks.uri} selectTrack={selectTrack}/>
             ))}
             
         </div>

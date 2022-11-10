@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function MusicSearchResult({tracks, chooseTrack}) {
+export default function MusicSearchResult({tracks, selectTrack}) {
   function handlePlay(){
-    chooseTrack(tracks)
+    selectTrack(tracks)
   }
 
 
